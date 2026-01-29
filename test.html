@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SecureOn | SecureIdentity SSO/EAM</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #030611;
+      --panel: #0b1122;
+      --panel-soft: #101731;
+      --accent: #2db7ff;
+      --accent-strong: #62e0ff;
+      --accent-secondary: #6cf0c2;
+      --text: #f5f8ff;
+      --muted: #9fa9c6;
+      --border: rgba(255, 255, 255, 0.08);
+      --gradient: linear-gradient(135deg, rgba(45,183,255,0.35), rgba(108,240,194,0.25));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Pretendard", "Inter", "Apple SD Gothic Neo", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, rgba(45, 183, 255, 0.2), transparent 55%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(14px);
+      background: rgba(3, 6, 17, 0.85);
+      border-bottom: 1px solid var(--border);
+      z-index: 20;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+    }
+
+    nav .logo {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.2rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent-strong);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4.5rem;
+    }
+
+    section {
+      background: var(--panel);
+      padding: 3rem;
+      border-radius: 26px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    section::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: 24px;
+      background: var(--gradient);
+      opacity: 0.13;
+      pointer-events: none;
+    }
+
+    section > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4.5rem 3rem;
+      background: linear-gradient(160deg, rgba(32, 105, 255, 0.25), rgba(19, 198, 177, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero .cta {
+      display: inline-flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 1rem 1.9rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #020306;
+      box-shadow: 0 18px 30px rgba(45, 183, 255, 0.35);
+    }
+
+    .btn-outline {
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin-bottom: 0.7rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .tagline {
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      letter-spacing: 0.3em;
+      font-size: 0.78rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      padding: 1.7rem;
+      border-radius: 20px;
+      background: var(--panel-soft);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      min-height: 170px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .card h3 {
+      font-size: 1.08rem;
+    }
+
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      flex: 1 1 160px;
+    }
+
+    .stat strong {
+      font-size: 2.3rem;
+      display: block;
+      color: var(--accent-strong);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(45, 183, 255, 0.12);
+      color: var(--accent-strong);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.8rem;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--accent-strong);
+      width: 28%;
+    }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .diagram__node {
+      padding: 1.4rem;
+      border-radius: 18px;
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .diagram__node strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .gallery figure {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #020409;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery figcaption {
+      padding: 0.9rem 1rem 1.2rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+      align-items: center;
+    }
+
+    .logo-grid figure {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      min-height: 150px;
+    }
+
+    .logo-grid img {
+      max-height: 46px;
+      width: auto;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+    }
+
+    .logo-grid figcaption {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 2.5rem 1rem 4rem;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 720px) {
+      nav {
+        flex-direction: column;
+        gap: 0.9rem;
+      }
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      section {
+        padding: 2.2rem;
+      }
+      .hero {
+        padding: 3.2rem 1.5rem;
+      }
+      table, th, td {
+        display: block;
+      }
+      th {
+        width: 100%;
+        border-bottom: none;
+        padding-bottom: 0.3rem;
+      }
+      td {
+        padding-top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">SECUREON</div>
+      <ul>
+        <li><a href="#overview">개요</a></li>
+        <li><a href="#architecture">구성도</a></li>
+        <li><a href="#features">주요 기능</a></li>
+        <li><a href="#deployment">구축</a></li>
+        <li><a href="#contact">문의</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="overview">
+      <p class="tagline">SecureIdentity SSO/EAM</p>
+      <h1>엔터프라이즈 Web·CS 환경을 위한 <br> 통합인증 & 권한관리 플랫폼</h1>
+      <p>
+        SecureOn의 SecureIdentity는 SSO와 EAM을 단일 제어면으로 통합해 복잡한 Web/CS 업무 시스템,
+        ERP, 그룹웨어, 금융·제조 핵심 자원까지 하나의 정책으로 보호합니다. PKI 기반 인증, OTP, 생체 인증,
+        보안 토큰까지 확장 가능한 아이덴티티 보안 체계를 제공합니다.
+      </p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#contact">데모 요청</a>
+        <a class="btn btn-outline" href="#features">기능 살펴보기</a>
+      </div>
+    </section>
+
+    <section id="solution">
+      <p class="tagline">Why SecureIdentity</p>
+      <h2>SecureOn이 제공하는 가치</h2>
+      <div class="grid">
+        <article class="card">
+          <span class="pill">Unified Access</span>
+          <h3>전사 통합 인증</h3>
+          <p>Single Sign-On, 정책 서버 기반 중복 로그인 제어, 다양한 채널/브라우저에서의 일관된 사용자 경험.</p>
+        </article>
+        <article class="card">
+          <span class="pill">Fine-grained EAM</span>
+          <h3>역할 기반 권한 관리</h3>
+          <p>RBAC 모델로 시스템-화면-버튼 단위까지 권한을 적용하고, 역할 변경 시 자동으로 권한 재부여.</p>
+        </article>
+        <article class="card">
+          <span class="pill">Operational Resilience</span>
+          <h3>장애 대응 & 모니터링</h3>
+          <p>지능형 로드밸런싱, Fail-Over, Cache 기능, 실시간 Agent·세션 모니터링 대시보드로 가용성 확보.</p>
+        </article>
+        <article class="card">
+          <span class="pill">Compliance Ready</span>
+          <h3>감사·규제 대응</h3>
+          <p>세션 감사, 로그인 감사, 권한 변경 추적과 LDAP/RDB 연동으로 금융·공공 규제 준수.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <p class="tagline">Solution blueprint</p>
+      <h2>SSO/EAM 대상 업무 시스템 구성도</h2>
+      <p>
+        SecureIdentity는 SafeAgent, Policy Server, Repository, Policy Manager로 구성되며, 업무 시스템과의 연동을 통해
+        사용자 인증과 권한을 중앙에서 제어합니다.
+      </p>
+      <div class="diagram">
+        <div class="diagram__node">
+          <strong>사용자</strong>
+          시스템 접속 → 통합 인증 요청
+        </div>
+        <div class="diagram__node">
+          <strong>SafeAgent</strong>
+          업무 시스템별 설치, 로그인 모듈/SSO API 연동
+        </div>
+        <div class="diagram__node">
+          <strong>Policy Server</strong>
+          인증/권한 정책 적용, 세션·토큰 발급, 중복 로그인 차단
+        </div>
+        <div class="diagram__node">
+          <strong>Repository (LDAP)</strong>
+          사용자 인증 정보, 권한 정책, 감사 로그 저장
+        </div>
+        <div class="diagram__node">
+          <strong>Policy Manager</strong>
+          Web GUI 기반 관리자 콘솔, 감사/통계/환경 설정
+        </div>
+      </div>
+      <table aria-label="주요 구성 요소">
+        <thead>
+          <tr>
+            <th>구성 모듈</th>
+            <th>기능 설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Client Manager</th>
+            <td>CS 프로그램과 연동되는 인증 모듈 배포, 설치 자동화 (Cab/Agent 패키지).</td>
+          </tr>
+          <tr>
+            <th>SSO Agent</th>
+            <td>로그인 서버와 연동되는 SSO Engine, 암호화 토큰 생성/검증, 다양한 언어(C/Java/ASP/.NET) API 제공.</td>
+          </tr>
+          <tr>
+            <th>Safe Agent for ERP/Siebel/SAP/Notes</th>
+            <td>주요 업무 패키지에 특화된 인증/권한 연동 Agent 제공으로 빠른 통합.</td>
+          </tr>
+          <tr>
+            <th>Safedentity Manager</th>
+            <td>역할 기반 권한 관리, 감사, WorkFlow, 스케줄러, 백업 기능을 제공하는 Spring 기반 Web 콘솔.</td>
+          </tr>
+          <tr>
+            <th>Monitoring & Audit</th>
+            <td>사용자 로그인 감사, 세션 검증, Agent 상태·CPU·메모리·DISK 사용률 모니터링.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="features">
+      <p class="tagline">Core capabilities</p>
+      <h2>주요 기능 하이라이트</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>1. 단일 인증 프로세스</h3>
+          <p>분산 환경에서 통합 인증을 제공하며, 보안 SSO 토큰을 Cookie/Parameter로 전달하여 App 간 세션을 공유합니다.</p>
+        </article>
+        <article class="card">
+          <h3>2. 보안 인증 토큰</h3>
+          <p>국가 검증 암호 알고리즘 기반 암호화 구조(Salt, EncKey, MAC)로 사용자 인증 데이터를 보호하고 PKI 연계.</p>
+        </article>
+        <article class="card">
+          <h3>3. 중복 로그인 제어</h3>
+          <p>Policy Server에서 세션을 실시간 검증해 중복 접속을 차단하고 OT/ERP 전용 Agent 연동.</p>
+        </article>
+        <article class="card">
+          <h3>4. 장애 대응</h3>
+          <p>자체 Load Balancing, Fail-Over, Cache 기능으로 별도 L4 없이도 고가용성을 달성.</p>
+        </article>
+        <article class="card">
+          <h3>5. 확장성</h3>
+          <p>ERP·SAP·Oracle·Domino 등 주요 업무 시스템과 연동, ID/PW·PKI·OTP·보안토큰·생체 인증까지 지원.</p>
+        </article>
+        <article class="card">
+          <h3>6. 감사 & 모니터링</h3>
+          <p>사용자 로그인/로그아웃, 세션 검증, 권한 변경 이력에 대한 통계/리포트 제공.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="rbac">
+      <p class="tagline">Role based access control</p>
+      <h2>역할 기반 권한 모델</h2>
+      <p>
+        NIST RBAC 표준을 따르는 SecureIdentity는 사용자-역할-권한-자원의 관계를 통해 권한 관리 효율성을 높입니다.
+        조직 변화나 역할 이동에도 권한을 자동 재배치하여 운영 리스크를 줄입니다.
+      </p>
+      <div class="diagram">
+        <div class="diagram__node">
+          <strong>역할 그룹</strong>
+          인사 / 회계 / 감사 / 운영 등
+        </div>
+        <div class="diagram__node">
+          <strong>권한 그룹</strong>
+          READ / WRITE / DELETE / APPROVE
+        </div>
+        <div class="diagram__node">
+          <strong>자원</strong>
+          시스템, 화면, 메뉴, 버튼, API
+        </div>
+        <div class="diagram__node">
+          <strong>보안 통제</strong>
+          접근 통제, 권한 변경 용이성, 적절한 임무 분리
+        </div>
+      </div>
+    </section>
+
+    <section id="deployment">
+      <p class="tagline">Deployment methodology</p>
+      <h2>SecureIdentity 구축 절차</h2>
+      <table aria-label="구축 단계">
+        <tbody>
+          <tr>
+            <th>1. 설계 단계</th>
+            <td>
+              가이드라인 작성, 인증 정보 식별, 통합 구축 설계, 테스트 계획 수립으로 각 업무 시스템별 요구사항 정의.
+            </td>
+          </tr>
+          <tr>
+            <th>2. 개발/환경 구축</th>
+            <td>
+              개발 환경 및 패키지 설치, LDAP/DB 구조 설계, 권한 정보 등록, SafeAgent 배포.
+            </td>
+          </tr>
+          <tr>
+            <th>3. 연동 & 검증</th>
+            <td>
+              각 업무 시스템과 SSO/EAM API 연동, Policy Server 설정, 단위/통합 테스트 및 Fail-Over 검증.
+            </td>
+          </tr>
+          <tr>
+            <th>4. 운영 / 모니터링</th>
+            <td>
+              Safedentity Manager에서 권한 운영, 감사/보고서 자동화, Agent 상태/사용량 실시간 모니터링.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="clients">
+      <p class="tagline">Trusted by industry leaders</p>
+      <h2>주요 고객사</h2>
+      <p>SecureIdentity는 금융, 공공, 교육, 물류 산업의 다양한 고객과 함께 통합 인증·권한 관리 체계를 구축했습니다.</p>
+      <div class="logo-grid">
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%230a3658'/><text x='50%25' y='55%25' fill='%23ffffff' font-size='42' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>한국은행</text></svg>" alt="한국은행 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%230b4c8c'/><text x='50%25' y='55%25' fill='%23bfe3ff' font-size='40' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>KOTRA</text></svg>" alt="코트라 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23095d27'/><text x='50%25' y='55%25' fill='%23e0ffe6' font-size='36' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>성균관대</text></svg>" alt="성균관대학교 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%238b0f2a'/><text x='50%25' y='55%25' fill='%23ffe1e1' font-size='40' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>고려대</text></svg>" alt="고려대학교 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%2300477d'/><text x='50%25' y='55%25' fill='%23c7f0ff' font-size='34' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>한국가스공사</text></svg>" alt="한국가스공사 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23004f45'/><text x='50%25' y='55%25' fill='%235dffd8' font-size='34' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>JB우리캐피탈</text></svg>" alt="JB우리캐피탈 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23005891'/><text x='50%25' y='55%25' fill='%23ffdf6c' font-size='30' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>국민체육진흥공단</text></svg>" alt="국민체육진흥공단 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%2305476b'/><text x='50%25' y='55%25' fill='%23ffb083' font-size='32' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>국민연금공단</text></svg>" alt="국민연금공단 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%2300673a'/><text x='50%25' y='55%25' fill='%23c5ffd9' font-size='42' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>DB생명</text></svg>" alt="DB생명 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23a62900'/><text x='50%25' y='55%25' fill='%23ffe3cf' font-size='36' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>NS홈쇼핑</text></svg>" alt="NS홈쇼핑 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%232b3273'/><text x='50%25' y='55%25' fill='%23f1eaff' font-size='32' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>공영홈쇼핑</text></svg>" alt="공영홈쇼핑 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23005482'/><text x='50%25' y='55%25' fill='%23c7f4ff' font-size='34' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>숭실대학교</text></svg>" alt="숭실대학교 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23003b71'/><text x='50%25' y='55%25' fill='%23ffd36e' font-size='36' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>CJ대한통운</text></svg>" alt="CJ대한통운 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23003b8e'/><text x='50%25' y='55%25' fill='%23bfe0ff' font-size='38' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>우리카드</text></svg>" alt="우리카드 로고" />
+        </figure>
+        <figure>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 120'><rect width='320' height='120' fill='%23007a5d'/><text x='50%25' y='55%25' fill='%23e3ffe7' font-size='28' font-family='Pretendard,Arial,sans-serif' text-anchor='middle' dominant-baseline='middle'>한국가스안전공사</text></svg>" alt="한국가스안전공사 로고" />
+        </figure>
+      </div>
+    </section>
+
+    <section id="contact">
+      <p class="tagline">Contact SecureOn</p>
+      <h2>전문가와 함께 보안 로드맵을 설계하세요</h2>
+      <p>security@secureon.com 으로 deck을 전달하거나, 아래 채널을 통해 빠르게 상담받을 수 있습니다.</p>
+      <div class="grid" style="margin-top: 1.5rem;">
+        <article class="card">
+          <h3>글로벌 센터</h3>
+          <p>서울 · 도쿄 · 싱가포르 · 베를린<br />24/7 SOC 및 ProServ 팀 운영</p>
+        </article>
+        <article class="card">
+          <h3>Security Hotline</h3>
+          <p>+82 31-751-2722<br />월-금 09:00-19:00 (KST)</p>
+        </article>
+        <article class="card">
+          <h3>파트너십</h3>
+          <p>파트너 프로그램, 공동 세일즈, 규제 대응 PoC 지원: partner@secureon.com</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 SecureOn Inc. All rights reserved.</p>
+    <p>대표: 박창민 | Tel. 031-751-2722 | Fax. 031-751-2723</p>
+    <p>주소: 경기도 성남시 수정구 청계산로 1길 27 (고등동) 더판교이룸2 201호</p>
+  </footer>
+</body>
+</html>
+
+
