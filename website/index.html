@@ -93,6 +93,7 @@
     header {
       position: sticky;
       top: 0;
+      width: 100%;
       backdrop-filter: blur(20px) saturate(180%);
       background: rgba(3, 6, 17, 0.75);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -102,12 +103,13 @@
     }
 
     nav {
-      max-width: 1200px;
+      width: 100%;
+      max-width: 100%;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.5rem;
+      padding: 1rem clamp(1.5rem, 5vw, 4rem);
     }
 
     nav .logo {
@@ -167,9 +169,10 @@
     }
 
     main {
-      max-width: 1200px;
+      width: 100%;
+      max-width: 100%;
       margin: 0 auto;
-      padding: 4rem 1.5rem 6rem;
+      padding: 4rem clamp(1.5rem, 5vw, 4rem) 6rem;
       display: flex;
       flex-direction: column;
       gap: 4.5rem;
@@ -178,7 +181,7 @@
     section {
       background: rgba(11, 17, 34, 0.6);
       backdrop-filter: blur(10px);
-      padding: 3rem;
+      padding: 3rem clamp(2rem, 5vw, 4rem);
       border-radius: 26px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 
@@ -188,6 +191,7 @@
       overflow: hidden;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       animation: fadeInUp 0.6s ease-out;
+      width: 100%;
     }
 
     section:hover {
@@ -221,11 +225,12 @@
     .hero {
       position: relative;
       text-align: center;
-      padding: 5rem 3rem;
+      padding: 5rem clamp(2rem, 5vw, 4rem);
       background: linear-gradient(160deg, rgba(32, 105, 255, 0.5), rgba(19, 198, 177, 0.4));
       border: 1px solid rgba(255, 255, 255, 0.15);
       overflow: hidden;
       animation: fadeInUp 0.8s ease-out;
+      width: 100%;
     }
 
     .hero::before {
@@ -741,12 +746,13 @@
     footer {
       text-align: center;
       color: var(--muted);
-      padding: 3rem 1rem 4rem;
+      padding: 3rem clamp(1rem, 5vw, 4rem) 4rem;
       font-size: 0.9rem;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       margin-top: 4rem;
       background: rgba(3, 6, 17, 0.5);
       backdrop-filter: blur(10px);
+      width: 100%;
     }
 
     footer p {
