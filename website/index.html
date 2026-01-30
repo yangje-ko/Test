@@ -811,6 +811,38 @@
       color: var(--accent-strong);
     }
 
+    footer .footer-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      vertical-align: middle;
+    }
+
+    footer .footer-logo__img {
+      height: 24px;
+      width: auto;
+      display: inline-block;
+      border-radius: 8px;
+      mix-blend-mode: lighten;
+      filter: 
+        drop-shadow(0 2px 6px rgba(45, 183, 255, 0.2))
+        brightness(1.1)
+        contrast(1.1)
+        saturate(1.05);
+      opacity: 0.9;
+      vertical-align: middle;
+      transition: opacity 0.3s ease;
+    }
+
+    footer .footer-logo:hover .footer-logo__img {
+      opacity: 1;
+      filter: 
+        drop-shadow(0 2px 8px rgba(45, 183, 255, 0.3))
+        brightness(1.15)
+        contrast(1.15)
+        saturate(1.1);
+    }
+
     /* 스크롤 애니메이션 */
     @media (prefers-reduced-motion: no-preference) {
       section {
@@ -1220,7 +1252,12 @@
   </main>
 
   <footer>
-    <p>© 2025 SecureOn Inc. All rights reserved.</p>
+    <p>
+      <span class="footer-logo">
+        <img class="footer-logo__img" src="assets/secureon.jpg" alt="SecureOn 로고" />
+      </span>
+      © 2025 SecureOn Inc. All rights reserved.
+    </p>
     <p>대표: 박창민 | Tel. 031-751-2722 | Fax. 031-751-2723 | Mail. changmin@secureon.co.kr</p>
     <p>주소: 경기도 성남시 수정구 청계산로 1길 27 (고등동) 더판교이룸2 201호</p>
   </footer>
