@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>사과게임 - Apple 10</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Pretendard", "Noto Sans KR", sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .game-container {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .main-panel {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .score {
+      font-size: 1.5rem;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .grid-container {
+      position: relative;
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 10px;
+      cursor: crosshair;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      position: relative;
+    }
+
+    .apple {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      position: relative;
+    }
+
+    .apple:hover {
+      transform: scale(1.05);
+    }
+
+    .apple.selected {
+      background: linear-gradient(135deg, #ff4757 0%, #c92a2a 100%);
+      transform: scale(0.95);
+    }
+
+    .apple.valid-selection {
+      background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+      animation: pulse 0.3s ease;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.95); }
+      50% { transform: scale(1.05); }
+    }
+
+    .apple.removing {
+      animation: disappear 0.3s ease forwards;
+    }
+
+    @keyframes disappear {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0);
+      }
+    }
+
+    .selection-box {
+      position: absolute;
+      border: 3px solid #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      pointer-events: none;
+      z-index: 10;
+      transition: background 0.2s ease;
+    }
+
+    .selection-box.valid {
+      border-color: #51cf66;
+      background: rgba(81, 207, 102, 0.2);
+    }
+
+    .side-panel {
+      background: white;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .timer-container {
+      width: 100%;
+      text-align: center;
+    }
+
+    .timer-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .timer-bar {
+      width: 100%;
+      height: 300px;
+      background: #f1f3f5;
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid #dee2e6;
+    }
+
+    .timer-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(to top, #51cf66 0%, #37b24d 100%);
+      transition: height 0.1s linear, background 0.3s ease;
+    }
+
+    .timer-fill.warning {
+      background: linear-gradient(to top, #ffd43b 0%, #fab005 100%);
+    }
+
+    .timer-fill.danger {
+      background: linear-gradient(to top, #ff6b6b 0%, #c92a2a 100%);
+    }
+
+    .timer-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+      z-index: 1;
+    }
+
+    .info-section {
+      width: 100%;
+      text-align: center;
+    }
+
+    .info-section h3 {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .best-score {
+      font-size: 1.8rem;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .controls {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+      color: white;
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .game-over-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .game-over-overlay.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .game-over-content {
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .game-over-content h2 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .final-score {
+      font-size: 3rem;
+      color: #667eea;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .perfect-message {
+      font-size: 1.5rem;
+      color: #51cf66;
+      margin-bottom: 20px;
+    }
+
+    .time-record {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .game-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .side-panel {
+        flex-direction: row;
+        min-width: auto;
+        width: 100%;
+      }
+
+      .timer-bar {
+        width: 200px;
+        height: 40px;
+      }
+
+      .timer-fill {
+        bottom: 0;
+        left: 0;
+        height: 100% !important;
+        width: var(--width) !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="main-panel">
+      <div class="header">
+        <h1>🍎 사과게임</h1>
+        <div class="score">점수: <span id="score">0</span></div>
+      </div>
+      
+      <div class="grid-container" id="gridContainer">
+        <div class="grid" id="grid"></div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="timer-container">
+        <div class="timer-label">남은 시간</div>
+        <div class="timer-bar">
+          <div class="timer-fill" id="timerFill"></div>
+          <div class="timer-text" id="timerText">2:00</div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3>최고 점수</h3>
+        <div class="best-score" id="bestScore">0</div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-start" id="startBtn">게임 시작</button>
+        <button class="btn btn-reset" id="resetBtn">새로 시작</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-over-overlay" id="gameOverOverlay">
+    <div class="game-over-content">
+      <h2>게임 종료!</h2>
+      <div class="final-score" id="finalScore">0점</div>
+      <div class="perfect-message" id="perfectMessage"></div>
+      <div class="time-record" id="timeRecord"></div>
+      <button class="btn btn-start" onclick="location.reload()">다시 하기</button>
+    </div>
+  </div>
+
+  <script>
+    // 게임 상태
+    let gameState = {
+      grid: [],
+      score: 0,
+      timeLeft: 120, // 2분 = 120초
+      gameRunning: false,
+      timerInterval: null,
+      isDragging: false,
+      startX: 0,
+      startY: 0,
+      selectedApples: new Set(),
+      startTime: null
+    };
+
+    // 요소 참조
+    const gridContainer = document.getElementById('gridContainer');
+    const gridElement = document.getElementById('grid');
+    const scoreElement = document.getElementById('score');
+    const timerFill = document.getElementById('timerFill');
+    const timerText = document.getElementById('timerText');
+    const bestScoreElement = document.getElementById('bestScore');
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const gameOverOverlay = document.getElementById('gameOverOverlay');
+    const finalScore = document.getElementById('finalScore');
+    const perfectMessage = document.getElementById('perfectMessage');
+    const timeRecord = document.getElementById('timeRecord');
+
+    let selectionBox = null;
+
+    // 최고 점수 로드
+    function loadBestScore() {
+      const saved = localStorage.getItem('appleBestScore');
+      if (saved) {
+        bestScoreElement.textContent = saved;
+      }
+    }
+
+    // 최고 점수 저장
+    function saveBestScore(score) {
+      const current = parseInt(bestScoreElement.textContent);
+      if (score > current) {
+        bestScoreElement.textContent = score;
+        localStorage.setItem('appleBestScore', score);
+      }
+    }
+
+    // 그리드 초기화 (17x10 = 170개)
+    function initGrid() {
+      gameState.grid = [];
+      gridElement.innerHTML = '';
+      
+      for (let i = 0; i < 170; i++) {
+        const value = Math.floor(Math.random() * 9) + 1;
+        gameState.grid.push({ value, element: null });
+        
+        const apple = document.createElement('div');
+        apple.className = 'apple';
+        apple.textContent = value;
+        apple.dataset.index = i;
+        
+        gameState.grid[i].element = apple;
+        gridElement.appendChild(apple);
+      }
+    }
+
+    // 타이머 업데이트
+    function updateTimer() {
+      if (!gameState.gameRunning) return;
+      
+      gameState.timeLeft -= 0.1;
+      
+      if (gameState.timeLeft <= 0) {
+        gameState.timeLeft = 0;
+        endGame();
+        return;
+      }
+      
+      const minutes = Math.floor(gameState.timeLeft / 60);
+      const seconds = Math.floor(gameState.timeLeft % 60);
+      timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      
+      const percentage = (gameState.timeLeft / 120) * 100;
+      timerFill.style.height = percentage + '%';
+      
+      // 색상 변경
+      timerFill.classList.remove('warning', 'danger');
+      if (percentage <= 25) {
+        timerFill.classList.add('danger');
+      } else if (percentage <= 50) {
+        timerFill.classList.add('warning');
+      }
+    }
+
+    // 게임 시작
+    function startGame() {
+      gameState.score = 0;
+      gameState.timeLeft = 120;
+      gameState.gameRunning = true;
+      gameState.startTime = Date.now();
+      
+      scoreElement.textContent = '0';
+      initGrid();
+      
+      if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+      }
+      gameState.timerInterval = setInterval(updateTimer, 100);
+      
+      startBtn.textContent = '진행 중...';
+      startBtn.disabled = true;
+    }
+
+    // 게임 종료
+    function endGame() {
+      gameState.gameRunning = false;
+      clearInterval(gameState.timerInterval);
+      
+      saveBestScore(gameState.score);
+      
+      finalScore.textContent = gameState.score + '점';
+      
+      // 완벽한 클리어 확인
+      if (gameState.score === 170) {
+        const elapsedTime = Math.floor((Date.now() - gameState.startTime) / 1000);
+        const minutes = Math.floor(elapsedTime / 60);
+        const seconds = elapsedTime % 60;
+        perfectMessage.textContent = '🎉 완벽한 클리어!';
+        timeRecord.textContent = `소요 시간: ${minutes}분 ${seconds}초`;
+      } else {
+        perfectMessage.textContent = '';
+        timeRecord.textContent = '';
+      }
+      
+      gameOverOverlay.classList.add('show');
+      startBtn.textContent = '게임 시작';
+      startBtn.disabled = false;
+    }
+
+    // 드래그 시작
+    function handleMouseDown(e) {
+      if (!gameState.gameRunning) return;
+      
+      const rect = gridContainer.getBoundingClientRect();
+      gameState.isDragging = true;
+      gameState.startX = e.clientX - rect.left;
+      gameState.startY = e.clientY - rect.top;
+      gameState.selectedApples.clear();
+      
+      // 선택 박스 생성
+      if (selectionBox) {
+        selectionBox.remove();
+      }
+      selectionBox = document.createElement('div');
+      selectionBox.className = 'selection-box';
+      selectionBox.style.left = gameState.startX + 'px';
+      selectionBox.style.top = gameState.startY + 'px';
+      gridContainer.appendChild(selectionBox);
+      
+      // 모든 사과 선택 해제
+      gameState.grid.forEach(apple => {
+        if (apple.element) {
+          apple.element.classList.remove('selected', 'valid-selection');
+        }
+      });
+    }
+
+    // 드래그 중
+    function handleMouseMove(e) {
+      if (!gameState.isDragging || !gameState.gameRunning) return;
+      
+      const rect = gridContainer.getBoundingClientRect();
+      const currentX = e.clientX - rect.left;
+      const currentY = e.clientY - rect.top;
+      
+      // 선택 박스 업데이트
+      const left = Math.min(gameState.startX, currentX);
+      const top = Math.min(gameState.startY, currentY);
+      const width = Math.abs(currentX - gameState.startX);
+      const height = Math.abs(currentY - gameState.startY);
+      
+      selectionBox.style.left = left + 'px';
+      selectionBox.style.top = top + 'px';
+      selectionBox.style.width = width + 'px';
+      selectionBox.style.height = height + 'px';
+      
+      // 선택된 사과 확인
+      gameState.selectedApples.clear();
+      gameState.grid.forEach((apple, index) => {
+        if (!apple.element) return;
+        
+        const appleRect = apple.element.getBoundingClientRect();
+        const appleLeft = appleRect.left - rect.left;
+        const appleTop = appleRect.top - rect.top;
+        const appleRight = appleLeft + appleRect.width;
+        const appleBottom = appleTop + appleRect.height;
+        
+        // 충돌 감지
+        const isIntersecting = !(
+          appleRight < left ||
+          appleLeft > left + width ||
+          appleBottom < top ||
+          appleTop > top + height
+        );
+        
+        if (isIntersecting) {
+          gameState.selectedApples.add(index);
+          apple.element.classList.add('selected');
+        } else {
+          apple.element.classList.remove('selected', 'valid-selection');
+        }
+      });
+      
+      // 합계 확인
+      const sum = Array.from(gameState.selectedApples).reduce((acc, idx) => {
+        return acc + gameState.grid[idx].value;
+      }, 0);
+      
+      // 합이 10이면 초록색
+      if (sum === 10 && gameState.selectedApples.size > 0) {
+        selectionBox.classList.add('valid');
+        gameState.selectedApples.forEach(idx => {
+          gameState.grid[idx].element.classList.add('valid-selection');
+        });
+      } else {
+        selectionBox.classList.remove('valid');
+      }
+    }
+
+    // 드래그 종료
+    function handleMouseUp(e) {
+      if (!gameState.isDragging || !gameState.gameRunning) return;
+      
+      gameState.isDragging = false;
+      
+      // 합계 확인
+      const sum = Array.from(gameState.selectedApples).reduce((acc, idx) => {
+        return acc + gameState.grid[idx].value;
+      }, 0);
+      
+      // 합이 10이면 사과 제거
+      if (sum === 10 && gameState.selectedApples.size > 0) {
+        const count = gameState.selectedApples.size;
+        
+        // 애니메이션 추가
+        gameState.selectedApples.forEach(idx => {
+          const apple = gameState.grid[idx];
+          if (apple.element) {
+            apple.element.classList.add('removing');
+            setTimeout(() => {
+              apple.element.remove();
+              gameState.grid[idx].element = null;
+            }, 300);
+          }
+        });
+        
+        // 점수 추가
+        gameState.score += count;
+        scoreElement.textContent = gameState.score;
+        
+        // 모든 사과 제거 시 게임 종료
+        if (gameState.score === 170) {
+          setTimeout(() => endGame(), 500);
+        }
+      }
+      
+      // 선택 박스 제거
+      if (selectionBox) {
+        selectionBox.remove();
+        selectionBox = null;
+      }
+      
+      // 선택 해제
+      gameState.grid.forEach(apple => {
+        if (apple.element) {
+          apple.element.classList.remove('selected', 'valid-selection');
+        }
+      });
+      gameState.selectedApples.clear();
+    }
+
+    // 이벤트 리스너
+    gridContainer.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    // 터치 이벤트 지원
+    gridContainer.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      handleMouseDown({ clientX: touch.clientX, clientY: touch.clientY });
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
+    });
+
+    document.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleMouseUp(e);
+    });
+
+    // 버튼 이벤트
+    startBtn.addEventListener('click', startGame);
+    resetBtn.addEventListener('click', () => {
+      if (gameState.gameRunning) {
+        if (confirm('진행 중인 게임을 초기화하시겠습니까?')) {
+          location.reload();
+        }
+      } else {
+        location.reload();
+      }
+    });
+
+    // 초기화
+    loadBestScore();
+    initGrid();
+    timerFill.style.height = '100%';
+  </script>
+</body>
+</html>
