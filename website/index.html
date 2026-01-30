@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SecureOn | SecureIdentity SSO/EAM</title>
   
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     :root {
       color-scheme: dark;
@@ -24,7 +29,12 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Pretendard", "Inter", "Apple SD Gothic Neo", sans-serif;
+      font-family: "Plus Jakarta Sans", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
 
     html {
@@ -102,13 +112,16 @@
 
     nav .logo {
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 600;
       letter-spacing: 0.2em;
       background: linear-gradient(135deg, var(--accent-strong), var(--accent-secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       transition: transform 0.3s ease;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
     }
 
     nav .logo:hover {
@@ -125,6 +138,7 @@
       color: var(--muted);
       text-decoration: none;
       font-size: 0.92rem;
+      font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -247,8 +261,10 @@
 
     .hero h1 {
       font-size: clamp(2.6rem, 6vw, 4.4rem);
-      line-height: 1.1;
+      line-height: 1.2;
       margin-bottom: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
       background: linear-gradient(135deg, #ffffff, var(--accent-strong));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -261,6 +277,9 @@
       margin: 0 auto 2.5rem;
       color: rgba(255, 255, 255, 0.9);
       font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.7;
+      letter-spacing: -0.01em;
       animation: fadeInUp 1s ease-out 0.4s both;
     }
 
@@ -275,11 +294,12 @@
       padding: 1rem 2rem;
       border-radius: 999px;
       border: 1px solid transparent;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
       font-size: 0.95rem;
+      letter-spacing: -0.01em;
       position: relative;
       overflow: hidden;
       display: inline-flex;
@@ -343,13 +363,16 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      font-weight: 700;
-      line-height: 1.2;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: -0.015em;
     }
 
     p {
       color: var(--muted);
-      line-height: 1.65;
+      line-height: 1.7;
+      font-weight: 400;
+      letter-spacing: -0.01em;
     }
 
     .tagline {
@@ -363,7 +386,7 @@
       background: rgba(45, 183, 255, 0.1);
       border-radius: 999px;
       border: 1px solid rgba(45, 183, 255, 0.2);
-      font-weight: 600;
+      font-weight: 500;
       animation: fadeInUp 0.6s ease-out;
     }
 
@@ -424,11 +447,20 @@
 
     .card h3 {
       font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
       transition: color 0.3s ease;
     }
 
     .card:hover h3 {
       color: var(--accent-strong);
+    }
+
+    .card p {
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
     }
 
     .stats {
@@ -457,7 +489,8 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      font-weight: 700;
+      font-weight: 600;
+      letter-spacing: -0.02em;
       transition: transform 0.3s ease;
     }
 
@@ -478,7 +511,7 @@
       text-transform: uppercase;
       border: 1px solid rgba(45, 183, 255, 0.3);
       transition: all 0.3s ease;
-      font-weight: 600;
+      font-weight: 500;
     }
 
     .card:hover .pill {
@@ -508,7 +541,7 @@
       color: var(--accent-strong);
       width: 28%;
       background: rgba(45, 183, 255, 0.1);
-      font-weight: 600;
+      font-weight: 500;
       text-transform: uppercase;
       font-size: 0.85rem;
       letter-spacing: 0.05em;
@@ -800,7 +833,7 @@
 <body>
   <header>
     <nav>
-      <div class="logo">SECUREON</div>
+      <a href="#" class="logo" id="logo-link">SECUREON</a>
       <ul>
         <li><a href="#overview">개요</a></li>
         <li><a href="#architecture">구성도</a></li>
@@ -1120,11 +1153,29 @@
       observer.observe(section);
     });
 
+    // 로고 클릭 시 페이지 상단으로 스크롤
+    const logoLink = document.getElementById('logo-link');
+    if (logoLink) {
+      logoLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+
     // 부드러운 스크롤 (앵커 링크)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      // 로고 링크는 이미 처리했으므로 제외
+      if (anchor.id === 'logo-link') return;
+      
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        
+        const target = document.querySelector(href);
         if (target) {
           target.scrollIntoView({
             behavior: 'smooth',
