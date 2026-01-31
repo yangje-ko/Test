@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>졸업 전시회 브로셔 · 임소윤</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #faf9f7;
+      --text: #1a1a1a;
+      --text-muted: #5c5c5c;
+      --accent: #8b7355;
+      --border: rgba(0,0,0,0.08);
+      --grain-opacity: 0.03;
+    }
+    [data-theme="dark"] {
+      --bg: #0d0d0d;
+      --text: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --accent: #c4a77d;
+      --border: rgba(255,255,255,0.08);
+      --grain-opacity: 0.04;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { height: 100%; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .page-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: relative;
+      z-index: 2;
+    }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .back-link:hover {
+      color: var(--accent);
+    }
+    .gallery-section {
+      flex: 1;
+      position: relative;
+      z-index: 2;
+      padding: 2rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .gallery-section .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .gallery-section .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .gallery-section .title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+    .slider-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      max-height: 75vh;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .slider-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.45s ease;
+    }
+    .slider-track .slide {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+    }
+    .slider-track .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: var(--bg);
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .slider-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      transform: translateY(-50%) scale(1.05);
+    }
+    .slider-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+    .slider-btn.prev { left: 1rem; }
+    .slider-btn.next { right: 1rem; }
+    .slider-counter {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .gallery-section .brochure-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .gallery-section .brochure-link:hover {
+      color: var(--text);
+    }
+    .gallery-section + .gallery-section {
+      padding-top: 0;
+      margin-top: 1rem;
+    }
+    .gallery-section + .gallery-section .title {
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 640px) {
+      .slider-btn { width: 40px; height: 40px; }
+      .slider-btn.prev { left: 0.5rem; }
+      .slider-btn.next { right: 0.5rem; }
+      .slider-btn svg { width: 20px; height: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">← 메인으로</a>
+    <h1>졸업 전시회 · 임소윤</h1>
+    <a href="brochure.pdf" target="_blank" rel="noopener" class="back-link">브로셔 PDF</a>
+  </header>
+  <section class="gallery-section">
+    <div class="container">
+      <p class="label">Portfolio</p>
+      <h2 class="title">졸업 전시회</h2>
+      <div class="slider-wrap">
+        <button type="button" class="slider-btn prev" aria-label="이전 사진">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+        </button>
+        <button type="button" class="slider-btn next" aria-label="다음 사진">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </button>
+        <div class="slider-track" id="sliderTrack">
+          <div class="slide"><img src="assets/brochure1.jpg" alt="졸업 전시회 1" /></div>
+          <div class="slide"><img src="assets/brochure2.jpg" alt="졸업 전시회 2" /></div>
+          <div class="slide"><img src="assets/brochure3.jpg" alt="졸업 전시회 3" /></div>
+          <div class="slide"><img src="assets/brochure4.jpg" alt="졸업 전시회 4" /></div>
+          <div class="slide"><img src="assets/brochure5.jpg" alt="졸업 전시회 5" /></div>
+          <div class="slide"><img src="assets/brochure6.jpg" alt="졸업 전시회 6" /></div>
+        </div>
+      </div>
+      <p class="slider-counter" id="sliderCounter">1 / 6</p>
+      <a href="brochure.pdf" target="_blank" rel="noopener" class="brochure-link">브로셔 PDF 보기 →</a>
+    </div>
+  </section>
+
+  <section class="gallery-section" id="internSection">
+    <div class="container">
+      <p class="label">Portfolio</p>
+      <h2 class="title">인턴</h2>
+      <div class="slider-wrap">
+        <button type="button" class="slider-btn prev" aria-label="이전 사진">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+        </button>
+        <button type="button" class="slider-btn next" aria-label="다음 사진">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </button>
+        <div class="slider-track" id="internSliderTrack">
+          <div class="slide"><img src="assets/intern01.jpg" alt="인턴 1" /></div>
+          <div class="slide"><img src="assets/intern02.jpg" alt="인턴 2" /></div>
+          <div class="slide"><img src="assets/intern03.jpg" alt="인턴 3" /></div>
+          <div class="slide"><img src="assets/intern04.jpg" alt="인턴 4" /></div>
+          <div class="slide"><img src="assets/intern05.jpg" alt="인턴 5" /></div>
+          <div class="slide"><img src="assets/intern06.jpg" alt="인턴 6" /></div>
+          <div class="slide"><img src="assets/intern07.jpg" alt="인턴 7" /></div>
+          <div class="slide"><img src="assets/intern08.jpg" alt="인턴 8" /></div>
+          <div class="slide"><img src="assets/intern09.jpg" alt="인턴 9" /></div>
+          <div class="slide"><img src="assets/intern10.jpg" alt="인턴 10" /></div>
+          <div class="slide"><img src="assets/intern11.jpg" alt="인턴 11" /></div>
+        </div>
+      </div>
+      <p class="slider-counter" id="internSliderCounter">1 / 11</p>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var themeKey = 'fashion-portfolio-theme';
+      var isDark = localStorage.getItem(themeKey) === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+
+      function initSlider(trackId, counterId, total, prevBtn, nextBtn) {
+        var track = document.getElementById(trackId);
+        var counter = document.getElementById(counterId);
+        var current = 0;
+        function update() {
+          track.style.transform = 'translateX(-' + (current * 100) + '%)';
+          counter.textContent = (current + 1) + ' / ' + total;
+        }
+        prevBtn.addEventListener('click', function () {
+          current = current === 0 ? total - 1 : current - 1;
+          update();
+        });
+        nextBtn.addEventListener('click', function () {
+          current = current === total - 1 ? 0 : current + 1;
+          update();
+        });
+        update();
+      }
+
+      var brochureSection = document.querySelector('.gallery-section');
+      initSlider('sliderTrack', 'sliderCounter', 6,
+        brochureSection.querySelector('.slider-btn.prev'),
+        brochureSection.querySelector('.slider-btn.next'));
+
+      var internSection = document.getElementById('internSection');
+      initSlider('internSliderTrack', 'internSliderCounter', 11,
+        internSection.querySelector('.slider-btn.prev'),
+        internSection.querySelector('.slider-btn.next'));
+    })();
+  </script>
+</body>
+</html>

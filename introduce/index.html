@@ -35,6 +35,7 @@
     }
     html {
       scroll-behavior: smooth;
+      height: 100%;
     }
     body {
       font-family: 'Outfit', sans-serif;
@@ -45,6 +46,7 @@
       overflow-x: hidden;
       transition: background 0.5s ease, color 0.5s ease;
       padding-top: 3.5rem;
+      min-height: 100vh;
     }
     body::before {
       content: '';
@@ -127,7 +129,7 @@
     /* Hero */
     .hero {
       position: relative;
-      min-height: 100vh;
+      min-height: calc(100vh - 3.5rem);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -368,44 +370,11 @@
       color: var(--text-muted);
       border-top: 1px solid var(--border);
     }
-    /* Portfolio */
-    .portfolio .container {
-      max-width: 900px;
-    }
-    .portfolio .pdf-wrap {
-      margin-top: 1.5rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--card-bg);
-      min-height: 80vh;
-    }
-    .portfolio .pdf-wrap iframe {
-      width: 100%;
-      height: 85vh;
-      min-height: 600px;
-      border: none;
-      display: block;
-    }
-    .portfolio .pdf-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: var(--accent);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    .portfolio .pdf-link:hover {
-      color: var(--accent-light);
-    }
     /* Responsive */
     @media (max-width: 640px) {
       .hero { padding: 3rem 0; }
       section { padding: 3rem 0; }
       .info-grid { grid-template-columns: 1fr; }
-      .portfolio .pdf-wrap iframe { min-height: 500px; }
       .about-info-row { flex-direction: column; gap: 1.5rem; align-items: center; }
       .profile-photo { width: 120px; height: 156px; }
     }
@@ -417,7 +386,7 @@
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
       <a href="#story">Story</a>
-      <a href="#portfolio">Portfolio</a>
+      <a href="portfolio.html">Portfolio</a>
       <a href="#contact">Contact</a>
     </div>
   </nav>
@@ -514,18 +483,6 @@
     </div>
   </section>
 
-  <section class="portfolio" id="portfolio">
-    <div class="container">
-      <p class="label reveal">Portfolio</p>
-      <h2 class="reveal">졸업 전시회 브로셔</h2>
-      <p class="reveal" style="color:var(--text-muted);margin-bottom:0.5rem">건국대학교 의상디자인학과 졸업 전시회 브로셔입니다.</p>
-      <div class="pdf-wrap reveal">
-        <iframe src="brochure.pdf" title="졸업 전시회 브로셔"></iframe>
-      </div>
-      <a href="brochure.pdf" target="_blank" rel="noopener" class="pdf-link reveal">새 탭에서 브로셔 열기</a>
-    </div>
-  </section>
-
   <section class="contact" id="contact">
     <div class="container">
       <p class="label reveal">Contact</p>
@@ -581,7 +538,7 @@
       reveals.forEach(function (el) { observer.observe(el); });
 
       var navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
-      var sections = ['about', 'experience', 'story', 'portfolio', 'contact'];
+      var sections = ['about', 'experience', 'story', 'contact'];
       function setActiveNav() {
         var top = window.scrollY + 120;
         var current = '';
