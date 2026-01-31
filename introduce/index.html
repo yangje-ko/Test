@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>임소윤 · Fashion Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #faf9f7;
+      --text: #1a1a1a;
+      --text-muted: #5c5c5c;
+      --accent: #8b7355;
+      --accent-light: #c4a77d;
+      --border: rgba(0,0,0,0.08);
+      --card-bg: #fff;
+      --grain-opacity: 0.03;
+    }
+    [data-theme="dark"] {
+      --bg: #0d0d0d;
+      --text: #f0f0f0;
+      --text-muted: #a0a0a0;
+      --accent: #c4a77d;
+      --accent-light: #8b7355;
+      --border: rgba(255,255,255,0.08);
+      --card-bg: #161616;
+      --grain-opacity: 0.04;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 400;
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.5s ease;
+      padding-top: 3.5rem;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text);
+    }
+    /* Nav */
+    .main-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 90;
+      padding: 1rem 1.5rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .main-nav .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .main-nav a {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.4rem 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .main-nav a:hover,
+    .main-nav a.active {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+    h1, h2, .serif {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 0;
+    }
+    .hero .tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.15s forwards;
+    }
+    .hero .sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Sections */
+    section {
+      padding: 4rem 0;
+      border-top: 1px solid var(--border);
+    }
+    section .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    section h2 {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal .delay-1 { transition-delay: 0.1s; }
+    .reveal .delay-2 { transition-delay: 0.2s; }
+    .reveal .delay-3 { transition-delay: 0.3s; }
+    /* About */
+    .about p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .about p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .info-item {
+      padding: 1rem 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .info-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .info-item .key {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+    .info-item .val {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .about-info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .profile-photo {
+      flex-shrink: 0;
+      width: 140px;
+      height: 180px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+    }
+    .about-info-row .info-grid {
+      flex: 1;
+      min-width: 200px;
+      margin-top: 0;
+    }
+    /* Experience cards */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .exp-card {
+      padding: 1.5rem 1.75rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .exp-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+      border-color: var(--accent);
+    }
+    .exp-card .company {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .exp-card .role {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .exp-card .period {
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+    /* Story blocks */
+    .story-block {
+      margin-bottom: 2.5rem;
+    }
+    .story-block h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .story-block p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    /* Contact */
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .contact-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .contact-links a:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .contact-links a:focus-visible,
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+      opacity: 0;
+    }
+    .scroll-hint .line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+      border-radius: 2px;
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.5; transform: scaleY(0.8); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+    footer {
+      padding: 3rem 0;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    /* Portfolio */
+    .portfolio .container {
+      max-width: 900px;
+    }
+    .portfolio .pdf-wrap {
+      margin-top: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--card-bg);
+      min-height: 80vh;
+    }
+    .portfolio .pdf-wrap iframe {
+      width: 100%;
+      height: 85vh;
+      min-height: 600px;
+      border: none;
+      display: block;
+    }
+    .portfolio .pdf-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .portfolio .pdf-link:hover {
+      color: var(--accent-light);
+    }
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero { padding: 3rem 0; }
+      section { padding: 3rem 0; }
+      .info-grid { grid-template-columns: 1fr; }
+      .portfolio .pdf-wrap iframe { min-height: 500px; }
+      .about-info-row { flex-direction: column; gap: 1.5rem; align-items: center; }
+      .profile-photo { width: 120px; height: 156px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="main-nav" aria-label="메인 메뉴">
+    <div class="container">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#story">Story</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+  <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">
+    <svg class="sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364 2.636l-1.591 1.591M21 12h-2.25m-2.636 2.636l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M18.75 12a6.75 6.75 0 11-13.5 0 6.75 6.75 0 0113.5 0z" /></svg>
+    <svg class="moon" style="display:none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+  </button>
+
+  <header class="hero">
+    <div class="container">
+      <p class="tag">Fashion Designer</p>
+      <h1>임소윤</h1>
+      <p class="sub">디자인 기획부터 완성까지, A부터 Z까지 함께 만드는 패션</p>
+    </div>
+    <div class="scroll-hint">
+      <span class="line"></span>
+      Scroll
+    </div>
+  </header>
+
+  <section class="about" id="about">
+    <div class="container">
+      <p class="label reveal">About</p>
+      <h2 class="reveal">한 제품이 완성되는 전 과정을 가까이에서 지켜보며 성장했습니다.</h2>
+      <p class="reveal">저는 패션 사업을 운영하시는 이모의 영향으로 어린 시절부터 자연스럽게 <strong>패션 실무 환경</strong>을 접하며 성장했습니다. 디자인 기획, 스와치 수집, 원단 선정, 작업지시서 작성, 샘플 점검과 수정, 최종 디스플레이에 이르기까지—패션을 단순한 동경이 아닌 <strong>실제 산업의 영역</strong>으로 인식하게 되었습니다.</p>
+      <p class="reveal">이 경험은 패션을 감성에 국한된 분야가 아니라 <strong>기획, 생산, 수정, 판매</strong>로 이어지는 구조적인 산업으로 이해하는 계기가 되었고, 바닥부터 함께 만들어가는 과정 속에서 더 큰 배움과 성장이 가능하다고 믿습니다.</p>
+      <div class="about-info-row">
+        <img src="profile.png" alt="임소윤 프로필 사진" class="profile-photo reveal" />
+        <div class="info-grid">
+          <div class="info-item reveal delay-1">
+            <div class="key">학력</div>
+            <div class="val">건국대학교 의상디자인학과 졸업</div>
+          </div>
+          <div class="info-item reveal delay-1">
+            <div class="key">생년월일</div>
+            <div class="val">1997. 06. 10</div>
+          </div>
+          <div class="info-item reveal delay-2">
+            <div class="key">이메일</div>
+            <div class="val"><a href="mailto:ysy6016@naver.com" style="color:inherit;text-decoration:none">ysy6016@naver.com</a></div>
+          </div>
+          <div class="info-item reveal delay-2">
+            <div class="key">연락처</div>
+            <div class="val"><a href="tel:01077956016" style="color:inherit;text-decoration:none">010-7795-6016</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="experience" id="experience">
+    <div class="container">
+      <p class="label reveal">Experience</p>
+      <h2 class="reveal">현장과 본사를 연결하는 시선</h2>
+      <div class="exp-list">
+        <div class="exp-card reveal delay-1">
+          <div class="company">안다르 (Andar)</div>
+          <div class="role">Design Team Intern</div>
+          <div class="period">2024.07 ~ 2024.09</div>
+        </div>
+        <div class="exp-card reveal delay-2">
+          <div class="company">크리니크 (Qlinique)</div>
+          <div class="role">Sales Assistant</div>
+          <div class="period">2023.02 ~ 2023.08</div>
+        </div>
+        <div class="exp-card reveal delay-2">
+          <div class="company">자라 (ZARA)</div>
+          <div class="role">Sales Assistant</div>
+          <div class="period">2022.01 ~ 2022.02</div>
+        </div>
+        <div class="exp-card reveal delay-3">
+          <div class="company">센틀리에 (Scentlier)</div>
+          <div class="role">Sales Assistant</div>
+          <div class="period">2018.08 ~ 2019.01</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="container">
+      <p class="label reveal">Story</p>
+      <h2 class="reveal">시련과 극복</h2>
+      <div class="story-block reveal">
+        <h3>비실기생에서 ‘가장 감각적인 학생’으로</h3>
+        <p>의상디자인학과에 전문적인 입시 미술 경험 없이 진학한 비실기생으로, 그림 실력에 대한 은근한 편견과 마주하며 혼란을 겪었습니다. 타인의 평가에 흔들리기보다 <strong>스스로의 태도를 지켜보자</strong>는 결론에 이르렀고, 염색, 실크 스크린, 콜라주 등 다양한 기법을 반복적으로 실험하며 저만의 표현 언어를 만들어갔습니다.</p>
+        <p>그 결과 교수님으로부터 <strong>“이 수업에서 가장 감각적인 학생”</strong>이라는 평가를 받았고, 졸업 전시회에서도 스토리텔링과 디자인 구성, 색채 활용 전반에 걸쳐 긍정적인 평가를 들을 수 있었습니다. 결과보다 태도와 과정이 결국 자신을 증명한다는 확신으로 남았습니다.</p>
+      </div>
+      <div class="story-block reveal delay-1">
+        <h3>현장에서 쌓은 소통과 신뢰</h3>
+        <p>크리니크 매장에서 정직원과 같은 책임감으로 고객 응대, 프로모션 운영, 재고 관리를 담당했고, 본사 실장님으로부터 뷰티 트렌드와 경쟁 브랜드에 대한 의견을 요청받으며 <strong>타 지점 이동 근무</strong>를 제안받았습니다. 고객 상담 시 체크리스트를 활용한 니즈 파악과 맞춤형 프로모션으로 고정 고객을 형성했고, 안다르 디자인팀 인턴으로서는 세탁·이염 테스트, 컬러북 제작 등 제품이 완성되기까지의 과정을 경험했습니다.</p>
+        <p>소비자의 반응을 읽는 감각과, 그 니즈가 제품으로 구현되기까지의 이해를 모두 갖추고, <strong>브랜드에 기여할 수 있는 태도</strong>를 갖추게 되었습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio" id="portfolio">
+    <div class="container">
+      <p class="label reveal">Portfolio</p>
+      <h2 class="reveal">졸업 전시회 브로셔</h2>
+      <p class="reveal" style="color:var(--text-muted);margin-bottom:0.5rem">건국대학교 의상디자인학과 졸업 전시회 브로셔입니다.</p>
+      <div class="pdf-wrap reveal">
+        <iframe src="brochure.pdf" title="졸업 전시회 브로셔"></iframe>
+      </div>
+      <a href="brochure.pdf" target="_blank" rel="noopener" class="pdf-link reveal">새 탭에서 브로셔 열기</a>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="container">
+      <p class="label reveal">Contact</p>
+      <h2 class="reveal">함께 만들어가고 싶습니다</h2>
+      <p class="reveal" style="color:var(--text-muted);margin-bottom:1rem">브랜드의 A부터 Z까지 함께 배우고 구축하며 비전을 만들어가고자 합니다.</p>
+      <div class="contact-links">
+        <a href="mailto:ysy6016@naver.com" class="reveal delay-1">이메일 보내기</a>
+        <a href="tel:01077956016" class="reveal delay-2">전화하기</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>임소윤 · Fashion Designer</p>
+      <p style="margin-top:0.5rem;">
+        <a href="mailto:ysy6016@naver.com" style="color:inherit;text-decoration:none">ysy6016@naver.com</a>
+        <span style="margin:0 0.75rem;opacity:0.5">|</span>
+        <a href="tel:01077956016" style="color:inherit;text-decoration:none">010-7795-6016</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const themeKey = 'fashion-portfolio-theme';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      let isDark = localStorage.getItem(themeKey) === 'dark' || (!localStorage.getItem(themeKey) && prefersDark);
+
+      function applyTheme() {
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        const sun = document.querySelector('.theme-toggle .sun');
+        const moon = document.querySelector('.theme-toggle .moon');
+        if (sun && moon) {
+          sun.style.display = isDark ? 'none' : 'block';
+          moon.style.display = isDark ? 'block' : 'none';
+        }
+      }
+      function toggleTheme() {
+        isDark = !isDark;
+        localStorage.setItem(themeKey, isDark ? 'dark' : 'light');
+        applyTheme();
+      }
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+      applyTheme();
+
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+      reveals.forEach(function (el) { observer.observe(el); });
+
+      var navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
+      var sections = ['about', 'experience', 'story', 'portfolio', 'contact'];
+      function setActiveNav() {
+        var top = window.scrollY + 120;
+        var current = '';
+        sections.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el && el.offsetTop <= top) current = id;
+        });
+        navLinks.forEach(function (a) {
+          var href = a.getAttribute('href');
+          if (href === '#' + current) a.classList.add('active'); else a.classList.remove('active');
+        });
+      }
+      window.addEventListener('scroll', setActiveNav);
+      window.addEventListener('load', setActiveNav);
+    })();
+  </script>
+</body>
+</html>
