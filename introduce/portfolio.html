@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>졸업 전시회 브로셔 · 임소윤</title>
+  <title>졸업 전시회 · 임소윤</title>
+  <script>
+    (function(){var t=document.documentElement;var k='fashion-portfolio-theme';var d=localStorage.getItem(k)==='dark';t.setAttribute('data-theme',d?'dark':'light');})();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -25,7 +28,10 @@
       --grain-opacity: 0.04;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { height: 100%; }
+    html {
+      height: 100%;
+      background: var(--bg);
+    }
     body {
       font-family: 'Outfit', sans-serif;
       background: var(--bg);
@@ -163,6 +169,27 @@
       font-size: 0.85rem;
       color: var(--text-muted);
     }
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      max-height: 75vh;
+      min-height: 280px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      margin-top: 2rem;
+    }
+    .video-wrap video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
     .gallery-section .brochure-link {
       display: inline-flex;
       align-items: center;
@@ -218,6 +245,12 @@
         </div>
       </div>
       <p class="slider-counter" id="sliderCounter">1 / 6</p>
+      <div class="video-wrap">
+        <video controls playsinline loop muted preload="auto" aria-label="졸업 전시회 런웨이">
+          <source src="assets/runway.mp4" type="video/mp4">
+          이 브라우저는 동영상 재생을 지원하지 않습니다.
+        </video>
+      </div>
       <a href="brochure.pdf" target="_blank" rel="noopener" class="brochure-link">브로셔 PDF 보기 →</a>
     </div>
   </section>
