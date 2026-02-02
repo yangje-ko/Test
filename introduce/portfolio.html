@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>졸업 전시회 · 임소윤</title>
   <script>
-    (function(){var t=document.documentElement;var k='fashion-portfolio-theme';var d=localStorage.getItem(k)==='dark';t.setAttribute('data-theme',d?'dark':'light');})();
+    (function(){var t=document.documentElement;var k='fashion-portfolio-theme';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var d=localStorage.getItem(k)==='dark'||(!localStorage.getItem(k)&&prefersDark);t.setAttribute('data-theme',d?'dark':'light');})();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -287,7 +287,8 @@
   <script>
     (function () {
       var themeKey = 'fashion-portfolio-theme';
-      var isDark = localStorage.getItem(themeKey) === 'dark';
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var isDark = localStorage.getItem(themeKey) === 'dark' || (!localStorage.getItem(themeKey) && prefersDark);
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
 
       function initSlider(trackId, counterId, total, prevBtn, nextBtn) {
