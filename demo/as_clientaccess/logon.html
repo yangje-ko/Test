@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>seucreon ClientAccess [DEMO] Login</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../assets/modern-demo.css">
+<script type="text/javascript">
+function checkLogin(frm) {
+  if (frm.uid.value === "") { alert("ID? ?????."); frm.uid.focus(); return false; }
+  if (frm.pwd.value === "") { alert("????? ?????."); frm.pwd.focus(); return false; }
+  return true;
+}
+</script>
+</head>
+<body>
+  <div class="landing-wrap">
+    <div class="landing-card app-card">
+      <div class="brand"><img src="../img/secureon.jpg" alt="seucreon 로고"></div>
+      <h1 class="landing-title">ClientAccess SSO Login</h1>
+      <form name="logon" method="post" action="logon_result.jsp" onsubmit="return checkLogin(this);" class="modern-form">
+        <label>ID</label><input type="text" name="uid" autocomplete="username">
+        <label>Password</label><input type="password" name="pwd" autocomplete="current-password">
+        <button class="action-btn" type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+:root {
+  --bg: #f3f6fc;
+  --surface: #ffffff;
+  --surface-soft: #f8faff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --primary: #0f4fe6;
+  --primary-strong: #0b3fb8;
+  --radius: 18px;
+  --shadow: 0 14px 36px rgba(17, 24, 39, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", Arial, sans-serif;
+  color: var(--text) !important;
+  background: linear-gradient(180deg, #eef3ff 0%, #f6f8fd 52%, #f8faff 100%);
+  line-height: 1.5;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--primary) !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-strong) !important;
+}
+
+table[width="100%"][height="100%"],
+table[height="100%"] {
+  min-height: 100vh;
+  padding: 18px 0;
+}
+
+table {
+  border-collapse: separate;
+  width: 100%;
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+img {
+  max-width: 100%;
+}
+
+input[type="text"],
+input[type="password"] {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px;
+  padding: 10px 12px !important;
+  font-size: 14px;
+  background: #fff !important;
+  color: var(--text) !important;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #93c5fd !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* 공통 상단/하단 영역 톤 정리 */
+table[bgcolor="#CCCCCC"] {
+  background: #eef2f7 !important;
+}
+
+/* 중앙 주요 컨테이너 카드화 */
+table[width="769"],
+table[width="753"],
+table[width="731"] {
+  width: min(1120px, calc(100vw - 52px)) !important;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin: 14px auto !important;
+}
+
+/* 상단 네비게이션 영역 통일 */
+td[rowspan="2"] img[src*="logo.gif"] {
+  margin: 10px 0 10px 14px;
+}
+
+/* 메인 콘텐츠 여백 강화 */
+td[valign="middle"],
+td[valign="top"] {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+/* 서비스 데이터 테이블 가독성 향상 */
+table[bgcolor="#CCCCCC"],
+table[bgcolor="#CCCC99"] {
+  border: 1px solid #dbe1ea;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+}
+
+tr[bgcolor="#eeeeee"] td,
+tr[bgcolor="#F3F3E9"] td {
+  background: var(--surface-soft) !important;
+  font-weight: 600;
+}
+
+tr[bgcolor="#FFFFFF"] td {
+  background: #ffffff !important;
+}
+
+td {
+  color: #243040;
+}
+
+font[color="#666666"] {
+  color: #5f6b7b !important;
+}
+
+/* 카드 내부 큰 간격을 줄여 시선 흐름 개선 */
+img[src*="dot_trans.gif"][height="80"],
+img[src*="dot_trans.gif"][height="70"] {
+  height: 28px !important;
+}
+
+/* 로그인 화면 입력 영역 강조 */
+form[name="logon"] {
+  background: #ffffffcc;
+  border: 1px solid #d9e1f2;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+  padding: 12px 10px;
+}
+
+/* 구형 이미지 버튼은 그대로 두고 살짝 입체감 추가 */
+a img {
+  transition: transform 0.15s ease, filter 0.2s ease;
+  filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.12));
+}
+
+a:hover img {
+  transform: translateY(-1px);
+}
+
+.app-card {
+  width: min(1240px, 100%);
+  padding: 44px;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 800;
+  font-size: 28px;
+  color: #111827;
+}
+
+.brand img {
+  height: 64px;
+  width: auto;
+  max-width: 380px;
+  object-fit: contain;
+  border-radius: 0;
+  filter: none;
+}
+
+.modern-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modern-form button {
+  margin-top: 14px;
+  cursor: pointer;
+  border: 0;
+  font-size: 18px;
+  padding: 18px 22px;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.modern-table th,
+.modern-table td {
+  border-bottom: 1px solid #eef2f7;
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 16px;
+}
+
+.modern-table th {
+  background: #f8faff;
+}
+
+.landing-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.landing-card {
+  width: min(1240px, 100%);
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 20px 45px rgba(2, 6, 23, 0.12);
+  padding: 44px;
+}
+
+.landing-title {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.landing-sub {
+  margin: 12px 0 0;
+  color: #6b7280;
+  font-size: 21px;
+}
+
+.landing-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+
+.action-btn {
+  display: block;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff !important;
+  border-radius: 16px;
+  padding: 20px 24px;
+  font-weight: 700;
+  font-size: 20px;
+  border: 1px solid #1d4ed8;
+}
+
+.action-btn.secondary {
+  background: #fff;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe;
+}
