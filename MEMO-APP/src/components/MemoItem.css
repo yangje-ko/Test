@@ -1,0 +1,166 @@
+.memo-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.memo-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  transform: translateY(-2px);
+}
+
+.memo-item.editing {
+  border-color: #667eea;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.memo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  gap: 15px;
+}
+
+.memo-title {
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  word-break: break-word;
+}
+
+.memo-title-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: inherit;
+  flex: 1;
+}
+
+.memo-title-input:focus {
+  outline: none;
+  border-color: #764ba2;
+}
+
+.memo-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: fit-content;
+}
+
+.memo-date {
+  font-size: 0.85rem;
+  color: #999;
+  white-space: nowrap;
+}
+
+.memo-content {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 40px;
+}
+
+.memo-content-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  margin-bottom: 15px;
+}
+
+.memo-content-input:focus {
+  outline: none;
+  border-color: #764ba2;
+}
+
+.memo-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.edit-button,
+.delete-button,
+.save-button,
+.cancel-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-button {
+  background: #667eea;
+  color: white;
+}
+
+.edit-button:hover {
+  background: #5568d3;
+  transform: translateY(-1px);
+}
+
+.delete-button {
+  background: #ff6b6b;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #ee5a5a;
+  transform: translateY(-1px);
+}
+
+.save-button {
+  background: #51cf66;
+  color: white;
+}
+
+.save-button:hover {
+  background: #40c057;
+  transform: translateY(-1px);
+}
+
+.cancel-button {
+  background: #adb5bd;
+  color: white;
+}
+
+.cancel-button:hover {
+  background: #868e96;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .memo-header {
+    flex-direction: column;
+  }
+
+  .memo-meta {
+    align-items: flex-start;
+  }
+
+  .memo-actions {
+    flex-wrap: wrap;
+  }
+}
